@@ -1,8 +1,12 @@
+using ApiJWT.Data;
 using ApiJWT.Helpers;
+using ApiJWT.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -28,6 +32,9 @@ namespace ApiJWT
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<JWT>(Configuration.GetSection("JWT"));
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+            services.AddDbContext<ApplicationDbContext>(options =>
+            options.UseSqlServer(Configuration.GetConnectionString("Default")));
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
